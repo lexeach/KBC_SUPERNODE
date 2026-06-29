@@ -1,17 +1,872 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-    rel="stylesheet"
-  />
-    <title>INR Pay</title>
-    <script type="module" crossorigin src="/assets/index-YEOVtZRO.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-B00dsCb_.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>KBC Network</title>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="assets/css/bootstrap/bootstrap.css">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="assets/css/app.css">
+        <!-- Swiper CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/web3@1.5.3/dist/web3.min.js"></script>
+
+    </head>
+
+    <body>
+
+        <!-- Main Wrap -->
+        <div class="wrap">
+            <!-- Dashboard Container -->
+            <div class="dashboard min-vh-100">
+                <!-- Navbar -->
+                <nav class="navbar bg-dashboard">
+                    <div class="container-fluid d-flex justify-content-center">
+                        <div>
+                            <a class="navbar-brand" href="#">
+                                <img src="./assets/logo.png" alt="Logo" width="140" height="24"
+                                    class="d-inline-block align-text-top">
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+                <!-- welcome title -->
+                <div class="d-flex justify-content-center input-section">
+
+
+                    <a class="mybtn1" href="#" id="notConnectedButton" onclick="connectWallet()">Not Connected</a>
+                </div>
+                <div class="head-card skew mx-5 mt-4">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="box">
+                                <p id="availableBalance" class="cards-numbers">0.00 <span class="sub-number">KBC</span>
+                                </p>
+                                <p class="cards-title">Total Mintable</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="box">
+                                <p id="myNodes" class="cards-numbers">0 <span class="sub-number">Node</span></p>
+                                <p class="cards-title">My Node</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="box">
+                                <p id="totalIncome" class="cards-numbers">0.00 <span class="sub-number">KBC</span>
+                                </p>
+                                <p class="cards-title">Total Income</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="box">
+                                <p id="withdrawalbeRoi" class="cards-numbers">0.00 <span class="sub-number">KBC</span>
+                                </p>
+                                <p class="cards-title">Withdrawable ROI <span id="countdownTimer"
+                                        class="text-pink fs-3"> {roiTimeLeft()}</span></p>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="head-card skew mx-5 mt-4">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="box">
+                                <p id="top4PoolForwarded" class="cards-numbers">0.00 <span
+                                        class="sub-number">USDT</span>
+                                </p>
+                                <p class="cards-title">Top4 Pool Forwarded</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="box">
+                                <p id="actualTO" class="cards-numbers">0.00 <span class="sub-number">USDT</span>
+                                </p>
+                                <p class="cards-title">Actual TO</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="box">
+                                <p id="top4Pool" class="cards-numbers">0 <span class="sub-number">USDT</span></p>
+                                <p class="cards-title">Top4 Pool</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="box">
+                                <p id="top4Pool2Distribute" class="cards-numbers">0.00 <span
+                                        class="sub-number">USDT</span>
+                                </p>
+                                <p class="cards-title">Top4 Pool2 Distribute</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--Funcation Slide-->
+                <div class="row mt-4 px-5">
+                    <div class="col-lg-12">
+                        <div class="swiper cryptoSlider">
+                            <div class="swiper-wrapper">
+                                <!-- Slide -->
+                                <div class="swiper-slide">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div
+                                                class="d-flex align-items-center justify-content-start flex-column h-100">
+                                                <h6 id="currentRound" class="slide-number">0.00 <span
+                                                        class="sub-title">KBC</span></h6>
+                                                <p class="slide-title">Current Round</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end -->
+                                <!-- Slide -->
+                                <div class="swiper-slide">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-column h-100">
+                                                <h6 id="currentRoundStart" class="slide-number">0.00 <span
+                                                        class="sub-title">KBC</span></h6>
+                                                <p class="slide-title">Current Round Start</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end -->
+                                <!-- Slide -->
+                                <div class="swiper-slide">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-column h-100">
+                                                <h6 id="currentUserId" class="slide-number">0.00 <span
+                                                        class="sub-title">KBC</span></h6>
+                                                <p class="slide-title">Current User ID</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end -->
+                                <!-- Slide -->
+                                <div class="swiper-slide">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-column h-100">
+                                                <h6 id="endTime" class="slide-number">0.00 <span
+                                                        class="sub-title">KBC</span></h6>
+                                                <p class="slide-title">End Time</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end -->
+                                <!-- Slide -->
+                                <div class="swiper-slide">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-column h-100">
+                                                <h6 id="totalNodes" class="slide-number">0.00 <span
+                                                        class="sub-title">KBC</span></h6>
+                                                <p class="slide-title">Total Nodes</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end -->
+                                <!-- Slide -->
+                                <div class="swiper-slide">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-column h-100">
+                                                <h6 id="nodePriceSlider" class="slide-number">0.00 <span
+                                                        class="sub-title">KBC</span></h6>
+                                                <p class="slide-title">Node Price</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div><!-- end swiper wrapper -->
+                        </div><!-- end swiper -->
+                    </div><!-- end col -->
+                </div><!-- end row -->
+                <!--Funcation Slide-->
+                <!-- KBC User info -->
+                <div class="row px-5">
+                    <div class="col-lg-6">
+                        <div class="d-flex justify-content-center mt-4">
+                            <div class="network-heading text-center rounded-top-2">
+                                KBC User info
+                            </div>
+                        </div>
+                        <div class="user-box">
+                            <div class="user-item">
+                                <div class="col-6 user-title">User ID:</div>
+                                <div id="userId" class="col-6 user-value">0</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Your Node</div>
+                                <div id="yourNodes" class="col-6 user-value">0 <small>Nodes</small></div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Sponsor:</div>
+                                <div id="referredForm" class="col-6 user-value">0</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">At Price</div>
+                                <div id="atPrice" class="col-6 user-value">0.00 <small>KBC</small></div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Direct</div>
+                                <div id="referredUsers" class="col-6 user-value">0 <small>Users</small> </div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Team income</div>
+                                <div id="totalIncome" class="col-6 user-value">0.00 <small>USDT</small></div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Root Balance</div>
+                                <div id="rootBalance" class="col-6 user-value">0.00 KBC</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Assured Reward</div>
+                                <div id="assuredReward" class="col-6 user-value">0.00</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Team Size</div>
+                                <div id="levenIncome" class="col-6 user-value">0</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Taken ROI</div>
+                                <div id="tokenRoi" class="col-6 user-value">0.00 <small>KBC</small></div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Taken ROI Till</div>
+                                <div id="stakeTimes" class="col-6 user-value">00-00-00</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Income Missed</div>
+                                <div id="incomeMissed" class="col-6 user-value">0.00 <small>KBC</small> </div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Register time</div>
+                                <div id="registerTime" class="col-6 user-value">0 days <small>KBC</small> </div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Mint Day</div>
+                                <div id="mintDays" class="col-6 user-value">0 days <small>KBC</small> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex justify-content-center mt-4">
+                            <div class="network-heading text-center rounded-top-2">
+                                KBC Network info
+                            </div>
+                        </div>
+                        <div class="network-box">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-6 network-item">
+                                    <p id="totalNodesInfo" class="network-number m-0 p-0">0k <span
+                                            class="sub-title">Nodes</span></p>
+                                    <p class="network-title m-0 p-0">Total <span class="sub-title">Nodes</span></p>
+                                </div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-6  network-item">
+                                    <p id="soldNodes" class="network-number m-0 p-0">0 <span
+                                            class="sub-title">Nodes</span></p>
+                                    <p class="network-title m-0 p-0">Sold Node</p>
+                                </div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-6  network-item">
+                                    <p id="nodePrice" class="network-number m-0 p-0">0.00 <span
+                                            class="sub-title">KBC</span></p>
+                                    <p class="network-title m-0 p-0">Node Price</p>
+                                </div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-6  network-item">
+                                    <p id="endTimeInfo" class="network-number m-0 p-0">00-00-0000</p>
+                                    <p class="network-title m-0 p-0">End Time</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reward-box">
+                            <div class="d-flex justify-content-center">
+                                <span class="text-pink fs-3">Today winner</span>
+                                <span id="countdownTimerWinner" class="text-pink fs-3">
+                                    {updateCountdownWinners()}</span>
+                            </div>
+
+                            <div class="text-center mt-2">
+                                <p class="m-0 text-warning">Top first</p>
+                                <p id="topOneAddress" class="m-0">0xb8D4217B314192857a2Ba34F413008F4EAdfd0f0</p>
+                                <p id="topOneValue" class="m-0">Turnover : <span class="fw-bold">0.00</span> KBC</p>
+                                <div class="d-flex justify-content-center">
+                                    <div class="bar"></div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <p class="m-0 text-warning">Top Second</p>
+                                <p id="topTwoAddress" class="m-0">0xb8D4217B314192857a2Ba34F413008F4EAdfd0f0</p>
+                                <p id="topTwoValue" class="m-0">Turnover : <span class="fw-bold">0.00</span> KBC</p>
+                                <div class="d-flex justify-content-center">
+                                    <div class="bar"></div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <p class="m-0 text-warning">Top Third</p>
+                                <p id="topThreeAddress" class="m-0">0xb8D4217B314192857a2Ba34F413008F4EAdfd0f0</p>
+                                <p id="topThreeValue" class="m-0">Turnover : <span class="fw-bold">0.00</span> KBC</p>
+                                <div class="d-flex justify-content-center">
+                                    <div class="bar"></div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <p class="m-0 text-warning">Top Fourth</p>
+                                <p id="topFourAddress" class="m-0">0xb8D4217B314192857a2Ba34F413008F4EAdfd0f0</p>
+                                <p id="topFourValue" class="m-0">Turnover : <span class="fw-bold">0.00</span> KBC</p>
+                                <div class="d-flex justify-content-center">
+                                    <div class="bar"></div>
+                                </div>
+                            </div>
+                            <!-- Search Box and Button -->
+                            <!-- Search Box and Button -->
+                            <div class="text-center mt-3">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6">
+                                        <input type="text" id="searcTopWinner" class=".searchInput1"
+                                            placeholder="Search...">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="mybtn2" onclick="searchTodayWinner()">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row px-5">
+                    <div class="col-lg-6 mt-4">
+                        <div class="d-flex justify-content-center mt-4">
+                            <div class="network-heading text-center rounded-top-2">
+                                KBC User Level info
+                            </div>
+                        </div>
+
+                        <div class="user-box">
+
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level Number</div>
+                                <div class="col-3 user-value">Team</div>
+                                <div class="col-3 user-value">Income</div>
+                            </div>
+
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 1</div>
+                                <div id="level1Round" class="col-3 user-value">0</div>
+                                <div id="level1Income" class="col-3 user-value">0 USDT</div>
+
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 2</div>
+                                <div id="level2Round" class="col-3 user-value">0</div>
+                                <div id="level2Income" class="col-3 user-value">0 USDT</div>
+                                <!-- <div id="level2" class="col-6 user-value">0 <small>Nodes</small></div> -->
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 3</div>
+                                <div id="level3Round" class="col-3 user-value">0</div>
+                                <div id="level3Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 4</div>
+                                <div id="level4Round" class="col-3 user-value">0</div>
+                                <div id="level4Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 5</div>
+                                <div id="level5Round" class="col-3 user-value">0</div>
+                                <div id="level5Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 6</div>
+                                <div id="level6Round" class="col-3 user-value">0</div>
+                                <div id="level6Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 7</div>
+                                <div id="level7Round" class="col-3 user-value">0</div>
+                                <div id="level7Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 8</div>
+                                <div id="level8Round" class="col-3 user-value">0</div>
+                                <div id="level8Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 9</div>
+                                <div id="level9Round" class="col-3 user-value">0</div>
+                                <div id="level9Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 10</div>
+                                <div id="level10Round" class="col-3 user-value">0</div>
+                                <div id="level10Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 11</div>
+                                <div id="level11Round" class="col-3 user-value">0</div>
+                                <div id="level11Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 12</div>
+                                <div id="level12Round" class="col-3 user-value">0</div>
+                                <div id="level12Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 13</div>
+                                <div id="level13Round" class="col-3 user-value">0</div>
+                                <div id="level13Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 14</div>
+                                <div id="level14Round" class="col-3 user-value">0</div>
+                                <div id="level14Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                            <div class="user-item">
+                                <div class="col-6 user-title">Level 15</div>
+                                <div id="level15Round" class="col-3 user-value">0</div>
+                                <div id="level15Income" class="col-3 user-value">0 USDT</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-6">
+                        <div class="d-flex justify-content-center mt-4">
+                            <div class="network-heading text-center rounded-top-2" id="top4poolHistoryHead">
+                                Top 4 Pool History
+                            </div>
+                        </div>
+
+                        <div class="reward-box" id="reward-box">
+                            <div class="d-flex justify-content-center">
+                                <span class="text-pink fs-3">TOP 4 POOL History</span>
+                                <span id="countdownTimerWinner" class="text-pink fs-3">
+                                </span>
+                                <!-- {updateCountdown()} -->
+
+                            </div>
+
+                            <div class="text-center mt-2">
+                                <p class="m-0 text-warning">Top 4 Pool Forwarded</p>
+                                <p id="top4PoolForwarded1" class="m-0"><span class="fw-bold">0.00</span> KBC
+                                </p>
+                                <div class="d-flex justify-content-center">
+                                    <div class="bar"></div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <p class="m-0 text-warning">Actual To</p>
+                                <p id="actualTo1" class="m-0"> <span class="fw-bold">0.00</span> KBC</p>
+                                <div class="d-flex justify-content-center">
+                                    <div class="bar"></div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <p class="m-0 text-warning">Top 4 Pool</p>
+                                <p id="top4Pool1" class="m-0"><span class="fw-bold">0.00</span> KBC</p>
+                                <div class="d-flex justify-content-center">
+                                    <div class="bar"></div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <p class="m-0 text-warning">Top 4 Pool2 Distribute</p>
+                                <p id="top4Pool2Distribute1" class="m-0"> <span class="fw-bold">0.00</span>
+                                    KBC</p>
+                                <div class="d-flex justify-content-center">
+                                    <div class="bar"></div>
+                                </div>
+                            </div>
+                            <!-- Search Box and Button -->
+                            <!-- Search Box and Button -->
+                            <div class="text-center mt-3">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6">
+                                        <input type="text" id="searchDistributionPoolBy" class=".searchInput1"
+                                            placeholder="Search...">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="mybtn2" onclick="searchDistributionPool()">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="text-center mt-3">
+                                <p class="text-warning">Contract Address</p>
+                                <p id="contractAddress" class="m-0" style="cursor: pointer; color: rgb(0, 255, 64);">Contract
+                                    Address: 0x508ae0adfa87403ab745f24381bc4632556b938f</p>
+                            </div> -->
+
+                            <!-- Contract Address -->
+                            <div class="text-center mt-3">
+                                <p class="text-warning">Contract Address</p>
+                                <p id="contractAddress" class="m-0" style="cursor: pointer; color: rgb(255, 0, 238);">
+                                    Contract
+                                    Detail: 0x508ae0adfa87403ab745f24381bc4632556b938f</p>
+                            </div>
+
+                            <!-- Contract Address -->
+                            <!-- <div class="text-center mt-6">
+
+                                <p id="top4Pool2Distribute1" class="m-0"> Contract Address: <span class="fw-bold">
+                                        12345</span>
+                                </p>
+                             
+                            </div> -->
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="row px-5">
+
+
+
+                    <div id="showHideReg" class="col-lg-6 mt-4">
+                        <div class="swap-wrap p-5">
+                            <div class="swap-head text-center">
+                                Buy node, Earn KBC
+                                <br>
+                                Node Price : <span id="nodePriceWrite" class="text-warning">0 USDT</span>
+                            </div>
+                            <div class="swap">
+                                <div class="swap-box">
+                                    <div class="node">
+                                        <p class="node-title">Node Quantity</p>
+                                        <input class="input-node form-control" value="" placeholder="node quantity"
+                                            type="number" id="disabledTextInput">
+                                    </div>
+                                    <div class="pay mt-2">
+                                        <p class="node-title">Referral ID</p>
+                                        <input class="input-node form-control" value="0" placeholder="referral Id"
+                                            type="text" id="referralIdInput">
+                                    </div>
+                                    <div class="pay text-center mt-5">
+                                        <a class="mybtn1" href="#" onclick="payNow()">
+                                            Pay Now
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Box end here -->
+
+
+                    <div class="col-lg-6 mt-4">
+                        <div class="swap-wrap p-5">
+                            <div class="swap-head text-center">
+                                Withdrawable KBC : <span id="withdrawableBalanceValue" class="text-warning">0.00
+                                    KBC</span>
+                                <br>
+                                <a class="mybtn1" href="#" onclick="withdrawNowFunction()">
+                                    Withdrawal Now
+                                </a>
+                            </div>
+
+                            <div class="swap-head11 text-center">
+                                <br />
+                                My Turnover : <span id="currentDayWithdrawlVal" class="text-warning">0.00
+                                    USDT</span>
+
+
+                            </div>
+                            <div class="swap">
+                                <div class="swap-box">
+                                    <div class="node">
+                                        <p class="node-title">Round Number</p>
+                                        <input id="currentDayWithdrawl"
+                                            class="input-node bg-dashboard form-control ps-2" value=""
+                                            placeholder="round number" type="text">
+
+                                    </div>
+                                    <div class="pay text-center mt-5">
+                                        <a class="mybtn1" href="#" onclick="searchWithdrawal()">
+                                            Search
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Box end here -->
+
+                    <div id="showHideAdminSection2" class="col-lg-6 mt-4">
+                        <div class="swap-wrap p-5">
+                            <div class="swap-head text-center">
+                                Withdraw Admin ROI :
+                                <span id="withdrawAbleAdminRoi" class="text-warning">0.00
+                                    KBC</span>
+                                <br>
+                                <a class="mybtn1" href="#" onclick="withdrawAdminRoi()">
+                                    Withdrawal Admin Now
+                                </a>
+                            </div>
+                            <div class="swap">
+                                <div class="swap-box">
+                                    <div class="node">
+                                        <p class="node-title">Set Liquidity Pool Address</p>
+                                        <input id="setLiquidityVal" class="input-node bg-dashboard form-control ps-2"
+                                            placeholder="address" value="" type="text">
+
+                                    </div>
+                                    <div class="pay text-center mt-5">
+                                        <a class="mybtn1" href="#" onclick="setLiquidity()">
+                                            Set Liquidity
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div><!-- Box end here -->
+                    <div id="showHideReferralLink" class="col-lg-6 mt-4">
+                        <div class="swap-wrap p-5">
+                            <div class="swap-head text-center">
+                                Share Your Referral
+                            </div>
+                            <div class="referral mt-3 text-center">
+                                <input type="text" id="referralLinkInput" class="input-node form-control" readonly
+                                    value="http://node2demo.netlify.app?">
+                                <button onclick="copyReferralLink()" class="btn btn-primary">Copy Referral
+                                    Link</button>
+                            </div>
+                        </div>
+                    </div><!-- Box end here -->
+
+                    <div id="showHideAdminSection6" class="col-lg-6 mt-4">
+                        <div class="swap-wrap p-5">
+                            <div class="swap-head text-center">
+                                Buy Back Pool Address
+                                <br>
+
+                            </div>
+
+                            <div class="swap">
+                                <div class="swap-box">
+                                    <div class="node">
+                                        <p class="node-title">Set Buy Back Pool Address</p>
+                                        <input id="setBuBackVal" class="input-node bg-dashboard form-control ps-2"
+                                            placeholder="address" value="" type="text">
+
+                                    </div>
+                                    <div class="pay text-center mt-5">
+                                        <a class="mybtn1" href="#" onclick="setBuyBackPool()">
+                                            setBuyBackPool
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Box end here -->
+
+                    <div id="showHideAdminSection1" class="col-lg-6 mt-4">
+                        <div class="swap-wrap p-5">
+                            <div class="swap-head text-center">
+                                Set Global Insurance Address
+                                <br>
+                            </div>
+                            <div class="swap">
+                                <div class="swap-box">
+                                    <div class="node">
+                                        <p class="node-title">Global Insurance Address</p>
+                                        <input id="globalInsuranceVal" class="input-node bg-dashboard form-control ps-2"
+                                            value="" placeholder="address" type="text">
+                                    </div>
+                                    <div class="pay text-center mt-5">
+                                        <a class="mybtn1" href="#" onclick="setGlobalInsuranceAddress()">
+                                            setglobalInsuranceAddress
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div><!-- Box end here -->
+                    <div id="showHideAdminSection3" class="col-lg-6 mt-4">
+                        <div class="swap-wrap p-5">
+                            <div class="swap-head text-center">
+                                Deposit KBC
+                                <br>
+                                <!-- <a class="mybtn1" href="#" onclick="withdrawNowFunction()">
+                                    Withdrawal Now
+                                </a> -->
+                            </div>
+
+
+                            <div class="swap">
+                                <div class="swap-box">
+                                    <div class="node">
+                                        <p class="node-title">Deposit KBC</p>
+                                        <input id="depositKbcVal" class="input-node bg-dashboard form-control ps-2"
+                                            value="" placeholder="amount" type="text">
+
+                                    </div>
+                                    <div class="pay text-center mt-5">
+                                        <a class="mybtn1" href="#" onclick="depositKBC()">
+                                            depositKBC
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div><!-- Box end here -->
+
+
+
+
+                    <div class="col-lg-6 mt-4" id="showHideAdminSection5">
+                        <div class="swap-wrap p-5">
+                            <div class="swap-head text-center">
+                                Close Round
+                                <br>
+                                <a class="mybtn1" href="#" onclick="closeRound()">
+                                    Close Round
+                                </a>
+                            </div>
+
+
+
+                        </div>
+                    </div><!-- Box end here -->
+
+
+                    <!-- <div id="showHideAdminSection5" class="col-lg-6 mt-4">
+                        <div class="swap-wrap p-5">
+                            <div class="swap-head text-center">
+                                Withdrawable Stable Coin
+                                <br> -->
+                    <!-- <a class="mybtn1" href="#" onclick="withdrawNowFunction()">
+                                    Withdrawal Now
+                                </a> -->
+                    <!-- </div>
+                            <div class="swap">
+                                <div class="swap-box">
+                                    <div class="node">
+                                        <p class="node-title">To</p>
+                                        <input id="withdrawlStableAddressTo"
+                                            class="input-node bg-dashboard form-control ps-2" value=""
+                                            placeholder="address" type="text">
+                                        <p class="node-title">Amount</p>
+                                        <input id="withdrawlStableAmount"
+                                            class="input-node bg-dashboard form-control ps-2" value=""
+                                            placeholder="amount" type="text">
+
+                                    </div>
+                                    <div class="pay text-center mt-5">
+                                        <a class="mybtn1" href="#" onclick="withdrawalStableCoin()">
+                                            withdrawalStableCoin
+                                        </a>
+                                    </div>
+                                </div>
+                            </div> -->
+
+
+
+                    <!-- </div> -->
+                    <!-- </div> -->
+                    <!-- Box end here -->
+
+                </div>
+
+            </div>
+            <footer class="bg-dashboard text-light py-4 mt-4">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>About Us</h5>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Quick Links</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="https://kbcfoundation.com/" target="_blank">Website</a></li>
+                                <li><a href="https://scan.kbcfoundation.com/" target="_blank">Explorer</a></li>
+                                <li><a href="https://scan.kbcfoundation.com/">DEX</a></li>
+                                <li><a href="#">Brige</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Contact Us</h5>
+                            <address>
+                                123 Street Name<br>
+                                City, Country<br>
+                                Phone: 123-456-7890<br>
+                                Email: example@example.com
+                            </address>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        </div>
+        <!-- Loader Overlay -->
+        <div id="loader-overlay" class="overlay">
+            <div class="loader-container">
+                <div class="loader"></div>
+                <div class="loading-text">Transaction is Processing....</div>
+            </div>
+        </div>
+    </body>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="./script.js"></script>
+    <script src="./web3/contract.js"></script>
+    <script>
+        // Initialize Swiper
+        // Swiper Slider
+        var swiper = new Swiper(".cryptoSlider", {
+            slidesPerView: 1,
+            loop: false,
+            spaceBetween: 24,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                },
+                768: {
+                    slidesPerView: 2.5,
+                },
+                1024: {
+                    slidesPerView: 3,
+                },
+                1200: {
+                    slidesPerView: 5,
+                },
+            },
+        });
+
+    </script>
+
 </html>
