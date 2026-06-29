@@ -97,11 +97,11 @@
   box-shadow: inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1);
   overflow: auto;
   font-family: "Rubik", sans-serif;
-  height: 500px;
+  height: 300px;
 }
 @media (max-width: 667px) {
   .dashboard .user-box {
-    height: 350px;
+    height: 300px;
   }
 }
 .dashboard .user-box .user-item {
@@ -209,7 +209,14 @@
   color: #3ab30a;
 }
 .dashboard .swap-wrap .swap {
-  height: 300px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dashboard .swap-wrap .swap1 {
+  margin-top: 10px;
+  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -218,7 +225,7 @@
   color: #5cb30a;
   font-family: "Rubik", sans-serif;
   font-weight: 300;
-  margin: 0 0 0 10px;
+  margin: 0 0 0 5px;
 }
 .dashboard .swap-wrap .swap .swap-box .node .input-node {
   height: 80px;
@@ -235,7 +242,7 @@
   color: #5cb30a;
   font-family: "Rubik", sans-serif;
   font-weight: 300;
-  margin: 0 0 0 10px;
+  margin: 0 0 0 0px;
 }
 .dashboard .swap-wrap .swap .swap-box .pay .input-node {
   height: 80px;
@@ -447,3 +454,6 @@ padding-bottom: 0px;
 .loading-text {
   margin-top: 10px;
 }
+
+
+
