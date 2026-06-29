@@ -1,5 +1,5 @@
-const contractAddress = "0x14184749ed9157Fb458ac189f107387Fb1fEceaA";
-const stableCoinAddress = "0xd8Be685E1868B4BAC6FE9D4dB8b6fDaA66CDc7f9";
+const contractAddress = "0xa8669D74381146400Ed800d23a1E899E5d94ae17";
+const stableCoinAddress = "0x0EB11261F9F778fEfd688e2dfAdB77862E96605b";
 const contractABI = [
   {
     inputs: [
