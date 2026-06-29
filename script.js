@@ -72,7 +72,7 @@ document
   .getElementById("contractAddress")
   .addEventListener("click", function () {
     window.open(
-      "https://testnet.bscscan.com/address/0x508ae0adfa87403ab745f24381bc4632556b938f#code",
+      "https://scan.kbcfoundation.com/address/0x14184749ed9157Fb458ac189f107387Fb1fEceaA",
       "_blank"
     );
   });

@@ -1,19 +1,61 @@
-const contractAddress = "0x7730D4D3c9767f9AE65981e9C9ba5FD417C34f90";
-const stableCoinAddress = "0x855e5f4917Bb78E1Fbd6962D03A0993f8F5033Cb";
-const examAddress = "0x75221506B9FC53fDdF3e516017926cbA6b5B3fd6";
+const contractAddress = "0x14184749ed9157Fb458ac189f107387Fb1fEceaA";
+const stableCoinAddress = "0xd8Be685E1868B4BAC6FE9D4dB8b6fDaA66CDc7f9";
 const contractABI = [
   {
     inputs: [
-      { internalType: "address", name: "stableCoin_", type: "address" },
-      { internalType: "address", name: "token_", type: "address" },
-      { internalType: "address", name: "exam_", type: "address" },
-      { internalType: "uint256", name: "_baseTokenPrice", type: "uint256" },
-      { internalType: "uint256", name: "_percentage", type: "uint256" },
-      { internalType: "uint256", name: "_times", type: "uint256" },
-      { internalType: "address payable", name: "_taxAddress", type: "address" },
+      {
+        internalType: "address",
+        name: "stableCoin_",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_gloabalInsurance",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_liquidityPool",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_tokenBuyBack",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_roundCloser",
+        type: "address",
+      },
     ],
     stateMutability: "nonpayable",
     type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "_user",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_time",
+        type: "uint256",
+      },
+    ],
+    name: "DepositKBC",
+    type: "event",
   },
   {
     anonymous: false,
@@ -27,8 +69,20 @@ const contractABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "_referrer",
+        name: "_referral",
         type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_level",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
       },
       {
         indexed: false,
@@ -37,21 +91,26 @@ const contractABI = [
         type: "uint256",
       },
     ],
-    name: "PartnerIncome",
+    name: "LevelsIncome",
     type: "event",
   },
   {
     anonymous: false,
     inputs: [
-      { indexed: true, internalType: "address", name: "user", type: "address" },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
       {
         indexed: false,
         internalType: "uint256",
-        name: "level",
+        name: "amount",
         type: "uint256",
       },
     ],
-    name: "PartnerlevelUpgrade",
+    name: "SendBalance",
     type: "event",
   },
   {
@@ -83,49 +142,19 @@ const contractABI = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
-        internalType: "address",
-        name: "_user",
-        type: "address",
-      },
-      {
         indexed: true,
         internalType: "address",
-        name: "_sender",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_receiver",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "_partner",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "_sponsor",
+        name: "user",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "_pool",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "_time",
+        name: "reward",
         type: "uint256",
       },
     ],
-    name: "getPoolPayment",
+    name: "WithdrawROI",
     type: "event",
   },
   {
@@ -134,100 +163,73 @@ const contractABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "_user",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_reEntered",
+        name: "user",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "_userID",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "_pool",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "_time",
+        name: "reward",
         type: "uint256",
       },
     ],
-    name: "getPoolReEntry",
+    name: "WithdrawReward",
     type: "event",
   },
   {
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "address",
-        name: "_user",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_partner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "_level",
-        type: "uint256",
-      },
-      {
         indexed: false,
-        internalType: "uint256",
-        name: "_time",
-        type: "uint256",
-      },
-    ],
-    name: "levelIncome",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: "address", name: "user", type: "address" },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "level",
-        type: "uint256",
-      },
-    ],
-    name: "levelUpgrade",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
         internalType: "address",
         name: "sender",
         type: "address",
       },
       {
         indexed: false,
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+      {
+        indexed: false,
         internalType: "uint256",
-        name: "partnerFee",
+        name: "amount",
         type: "uint256",
       },
-      { indexed: false, internalType: "uint256", name: "now", type: "uint256" },
     ],
-    name: "partnerFeePaid",
+    name: "WithdrawStable",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "widrwalType",
+        type: "string",
+      },
+    ],
+    name: "WithdrawalCoin",
     type: "event",
   },
   {
@@ -242,7 +244,7 @@ const contractABI = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "_pool",
+        name: "_amount",
         type: "uint256",
       },
       {
@@ -252,28 +254,127 @@ const contractABI = [
         type: "uint256",
       },
     ],
-    name: "regPoolEntry",
+    name: "toBuyBackPool",
     type: "event",
   },
   {
-    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    name: "LEVEL_PRICE",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_user",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_time",
+        type: "uint256",
+      },
+    ],
+    name: "toInsurancePool",
+    type: "event",
   },
   {
-    inputs: [],
-    name: "REGESTRATION_FESS",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_user",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_time",
+        type: "uint256",
+      },
+    ],
+    name: "toLiquidityPool",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "Round",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "first",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "second",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "third",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "fourth",
+        type: "uint256",
+      },
+    ],
+    name: "top4winners",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "LEVEL_PRICE",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      { internalType: "uint256", name: "_referrerID", type: "uint256" },
-      { internalType: "uint256", name: "_coreferrerID", type: "uint256" },
-      { internalType: "uint256", name: "_amount", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "_referrerID",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_node",
+        type: "uint256",
+      },
     ],
     name: "Registration",
     outputs: [],
@@ -281,102 +382,398 @@ const contractABI = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "TOP",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    inputs: [],
+    name: "closeRound",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "currRound",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "_level", type: "uint256" }],
-    name: "UpgradeLevel",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "_level", type: "uint256" }],
-    name: "UpgradePartnerLevel",
-    outputs: [],
-    stateMutability: "nonpayable",
+    inputs: [],
+    name: "currRoundStartTime",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
     name: "currUserID",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "exam",
-    outputs: [{ internalType: "contract Exam", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getNextReward",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "income",
     outputs: [
-      { internalType: "uint256", name: "planer", type: "uint256" },
-      { internalType: "uint256", name: "income", type: "uint256" },
-      { internalType: "uint256", name: "levelIncomeReceived", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "dailyUserTO",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "time",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "myTO",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "winAmount",
+        type: "uint256",
+      },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "isTopApproving",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    name: "depositKBC",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "directIncome",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "endTime",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      { internalType: "uint256", name: "", type: "uint256" },
-      { internalType: "address", name: "", type: "address" },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
     ],
-    name: "levelCoRefrer",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "fundLeadershipReward",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "gettrxBalance",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [
-      { internalType: "uint256", name: "", type: "uint256" },
-      { internalType: "address", name: "", type: "address" },
+    inputs: [],
+    name: "globalInsurance",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
     ],
-    name: "levelRefrer",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "leadershipReward",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
     name: "level_income",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
     name: "levels",
     outputs: [
-      { internalType: "uint256", name: "one", type: "uint256" },
-      { internalType: "uint256", name: "two", type: "uint256" },
-      { internalType: "uint256", name: "three", type: "uint256" },
-      { internalType: "uint256", name: "four", type: "uint256" },
-      { internalType: "uint256", name: "five", type: "uint256" },
-      { internalType: "uint256", name: "six", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "two",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "three",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "four",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "five",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "six",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "seven",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "eight",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "nine",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "ten",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "eleven",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "twelve",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "thirteen",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "forteen",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "fifteen",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "levelsIncome",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "two",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "three",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "four",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "five",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "six",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "seven",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "eight",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "nine",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "ten",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "eleven",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "twelve",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "thirteen",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "forteen",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "fifteen",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "liquidityPool",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "mintDays",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "nodePrice",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "price",
+        type: "uint256",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -384,315 +781,633 @@ const contractABI = [
   {
     inputs: [],
     name: "ownerWallet",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "parLevels",
     outputs: [
-      { internalType: "uint256", name: "one", type: "uint256" },
-      { internalType: "uint256", name: "two", type: "uint256" },
-      { internalType: "uint256", name: "three", type: "uint256" },
-      { internalType: "uint256", name: "four", type: "uint256" },
-      { internalType: "uint256", name: "five", type: "uint256" },
-      { internalType: "uint256", name: "six", type: "uint256" },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
     ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "partnerCount",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "partnerFee",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "partnerID",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    name: "partnerNo",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "partnerTurnOver",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      { internalType: "uint256", name: "", type: "uint256" },
-      { internalType: "address", name: "", type: "address" },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
     ],
-    name: "partnerUpgradeCount",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256", name: "", type: "uint256" },
-      { internalType: "address", name: "", type: "address" },
-    ],
-    name: "partnerUpgradePower",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256", name: "", type: "uint256" },
-      { internalType: "address", name: "", type: "address" },
-    ],
-    name: "partnerUpgradeStatus",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "partnrRefReq",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "_amount", type: "uint256" }],
-    name: "payPartnerFee",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "pool1activeUserID",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "pool1currUserID",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    name: "pool1userList",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "pool1users",
+    name: "ranks",
     outputs: [
-      { internalType: "bool", name: "isExist", type: "bool" },
-      { internalType: "uint256", name: "id", type: "uint256" },
-      { internalType: "uint256", name: "payment_received", type: "uint256" },
-      { internalType: "uint256", name: "autoIncome", type: "uint256" },
-      { internalType: "uint256", name: "PartnerPoolRecieved", type: "uint256" },
-      { internalType: "uint256", name: "SponsorPoolRecieved", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "starOne",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "starTwo",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "starThree",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "starFour",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "starFive",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "starSix",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "starSeven",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "starOnePaid",
+        type: "bool",
+      },
+      {
+        internalType: "bool",
+        name: "starTwoPaid",
+        type: "bool",
+      },
+      {
+        internalType: "bool",
+        name: "starThreePaid",
+        type: "bool",
+      },
+      {
+        internalType: "bool",
+        name: "starFourPaid",
+        type: "bool",
+      },
+      {
+        internalType: "bool",
+        name: "starFivePaid",
+        type: "bool",
+      },
+      {
+        internalType: "bool",
+        name: "starSixPaid",
+        type: "bool",
+      },
+      {
+        internalType: "bool",
+        name: "starSevenPaid",
+        type: "bool",
+      },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
     name: "regTime",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "_exam", type: "address" }],
-    name: "setExamContract",
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "reports",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "firstTO",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "secondTO",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "thirdTO",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "fourthTO",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "first",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "second",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "third",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "fourth",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "top4PoolForwarded",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "top4Pool",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "top4Pool2Distribute",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "actualTO",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "roundCloser",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_address",
+        type: "address",
+      },
+    ],
+    name: "setLiquidityPoolAddress",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "req", type: "uint256" }],
-    name: "setPartRefReq",
+    inputs: [
+      {
+        internalType: "address",
+        name: "_address",
+        type: "address",
+      },
+    ],
+    name: "setRoundCloserAddress",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "fess", type: "uint256" }],
-    name: "setRegistrationFess",
+    inputs: [
+      {
+        internalType: "address",
+        name: "_address",
+        type: "address",
+      },
+    ],
+    name: "setbuyBackPoolAddress",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "rate", type: "uint256" }],
-    name: "setTaxRate",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "bool", name: "_status", type: "bool" }],
-    name: "setTopApproving",
+    inputs: [
+      {
+        internalType: "address",
+        name: "_address",
+        type: "address",
+      },
+    ],
+    name: "setglobalInsuranceAddress",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [],
-    name: "sponsorReward",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    name: "soldNode",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "node",
+        type: "uint256",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
     name: "stableCoin",
-    outputs: [{ internalType: "contract IBEP20", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "taxRate",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "token",
-    outputs: [{ internalType: "contract IBEP20", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "tokenPrice",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "tokenReward",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalQulifiedUser",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "totalReward",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "_newPartner", type: "address" }],
-    name: "transferPartnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "_newPartner", type: "address" }],
-    name: "transferPartnershipByAdmin",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256", name: "", type: "uint256" },
-      { internalType: "address", name: "", type: "address" },
+    outputs: [
+      {
+        internalType: "contract IBEP20",
+        name: "",
+        type: "address",
+      },
     ],
-    name: "upgradeCount",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "startTime",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      { internalType: "uint256", name: "", type: "uint256" },
-      { internalType: "address", name: "", type: "address" },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
     ],
-    name: "upgradePower",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    name: "takenTop4Income",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    inputs: [],
+    name: "tokenBuyBack",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalNode",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "turnOver",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "two",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "three",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "four",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "five",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "six",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "seven",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "eight",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "nine",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "ten",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "eleven",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "twelve",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "thirteen",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "forteen",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "fifteen",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     name: "userList",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "userTurnOver",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      { internalType: "uint256", name: "", type: "uint256" },
-      { internalType: "address", name: "", type: "address" },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
     ],
-    name: "userUpgradeStatus",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    name: "userTurnOver",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
     name: "users",
     outputs: [
-      { internalType: "bool", name: "isExist", type: "bool" },
-      { internalType: "uint256", name: "id", type: "uint256" },
-      { internalType: "uint256", name: "referrerID", type: "uint256" },
-      { internalType: "uint256", name: "coreferrerID", type: "uint256" },
-      { internalType: "uint256", name: "referredUsers", type: "uint256" },
-      { internalType: "uint256", name: "coreferredUsers", type: "uint256" },
-      { internalType: "uint256", name: "income", type: "uint256" },
-      { internalType: "uint256", name: "levelIncomeReceived", type: "uint256" },
-      { internalType: "uint256", name: "stageIncomeReceived", type: "uint256" },
+      {
+        internalType: "bool",
+        name: "isExist",
+        type: "bool",
+      },
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "referrerID",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "ownNode",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "atPrice",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "referredUsers",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "income",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "rootBalance",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "assuredReward",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "levelIncomeReceived",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "takenROI",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "stakeTimes",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "incomeMissed",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawAdminROI",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawROI",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_star",
+        type: "uint256",
+      },
+    ],
+    name: "withdrawReward",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawableAdminROI",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "reward",
+        type: "uint256",
+      },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      { internalType: "address payable", name: "_to", type: "address" },
-      { internalType: "uint256", name: "_amount", type: "uint256" },
+      {
+        internalType: "address",
+        name: "_address",
+        type: "address",
+      },
+    ],
+    name: "withdrawableROI",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "reward",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_address",
+        type: "address",
+      },
+    ],
+    name: "withdrawableReward",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "_star",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address payable",
+        name: "_to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
     ],
     name: "withdrawalStableCoin",
     outputs: [],
@@ -700,7 +1415,6 @@ const contractABI = [
     type: "function",
   },
 ];
-
 const stableCoinABI = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
   {
@@ -972,173 +1686,6 @@ const stableCoinABI = [
     type: "function",
   },
 ];
-const examABI = [
-  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-      { indexed: false, internalType: "address", name: "_to", type: "address" },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "Withdrawal",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "partnerFee",
-        type: "uint256",
-      },
-      { indexed: false, internalType: "uint256", name: "now", type: "uint256" },
-    ],
-    name: "paidPartnerFee",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "status",
-        type: "string",
-      },
-      { indexed: false, internalType: "uint256", name: "now", type: "uint256" },
-    ],
-    name: "result",
-    type: "event",
-  },
-  {
-    inputs: [{ internalType: "address", name: "_student", type: "address" }],
-    name: "isPass",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "isPassedPercent",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "_student", type: "address" }],
-    name: "lastAttempt",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "_student", type: "address" }],
-    name: "noOfAttempts",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "owner",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "passPercent",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "_qPercent", type: "uint256" }],
-    name: "setPassPercent",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256[]", name: "questions", type: "uint256[]" },
-      { internalType: "uint256[]", name: "corr_choices", type: "uint256[]" },
-    ],
-    name: "setQuestion",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256[]", name: "setQuest", type: "uint256[]" },
-      { internalType: "uint256[]", name: "answer", type: "uint256[]" },
-    ],
-    name: "subAnswer",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalPassedUser",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalQuestions",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalQulifiedUser",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "user",
-    outputs: [
-      { internalType: "uint256", name: "obtainMarks", type: "uint256" },
-      { internalType: "uint256", name: "lastAttain", type: "uint256" },
-      { internalType: "uint256", name: "totalMarks", type: "uint256" },
-      { internalType: "string", name: "status", type: "string" },
-      { internalType: "uint256", name: "percentage", type: "uint256" },
-      { internalType: "uint256", name: "attempts", type: "uint256" },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-];
 // Initialize Web3.js
 const web3 = new Web3(Web3.givenProvider);
 // const web3 = new Web3();
@@ -1149,56 +1696,42 @@ const stableCoinInstance = new web3.eth.Contract(
   stableCoinABI,
   stableCoinAddress
 );
-const examInstance = new web3.eth.Contract(examABI, examAddress);
 
 let connectedAddress;
 let users;
-let partnerID;
-let isPartner, isExamQualifier;
-async function connectWallet() {
-  if (typeof window.ethereum !== "undefined") {
-    const sections2 = (document.getElementById(
-      "upgradeSectionHiding"
-    ).style.display = "none");
-    document.getElementById("onlyForPartner1").style.display = "none";
 
-    // sections2[0].style.display = "none";
+async function connectWallet() {
+  console.log("Connect wallet function called");
+  if (typeof window.ethereum !== "undefined") {
     // Request account access if needed
     let accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
     connectedAddress = accounts[0];
+    console.log("Connected address: A1", connectedAddress);
     document.getElementById(
       "notConnectedButton"
     ).innerHTML = `Connected: ${connectedAddress}`;
-    // connectedAddress = "0xb8D4217B314192857a2Ba34F413008F4EAdfd0f0";
-    try {
-      users = await contractInstance.methods
-        .users(connectedAddress)
-        .call({ from: connectedAddress });
-      isExamQualifier = await examInstance.methods
-        .isPass(connectedAddress)
-        .call({ from: connectedAddress });
-    } catch (e) {
-      if (
-        e.message ==
-        "Returned values aren't valid, did it run Out of Gas? You might also see this error if you are not using the correct ABI for the contract you are retrieving data from, requesting data from a block number that does not exist, or querying a node which is not fully synced."
-      ) {
-        alert("ON Wrong Chain");
-        document.getElementById("loadingText").innerHTML =
-          "Please Switch to Correct Chain....";
-        document.getElementById("loader-overlay").style.display = "flex";
-      }
-      console.log("Error Catched:    ", e.message);
-    }
+
+    users = await contractInstance.methods
+      .users(connectedAddress)
+      .call({ from: connectedAddress });
   } else {
     console.error("MetaMask is not installed");
   }
 }
 
 async function weiToEth(wei) {
-  const ether = web3.utils.fromWei(wei, "ether");
-  return parseFloat(ether).toFixed(4);
+  // Convert wei to a BigNumber instance
+  const weiBN = new BigNumber(wei);
+
+  // Convert wei to ether using BigNumber
+  const etherBN = weiBN.dividedBy(new BigNumber("1000000000000000000"));
+
+  // Return the ether value as a string with fixed decimal places
+  return etherBN.toFixed(2); // Adjust the number of decimal places as needed
+  // const ether = web3.utils.fromWei(wei, "ether");
+  // return parseFloat(ether).toFixed(2);
 }
 async function ethToWei(wei) {
   const amount = web3.utils.toWei(wei, "ether");
@@ -1252,310 +1785,227 @@ function pad(number) {
   return number < 10 ? "0" + number : number;
 }
 
-// document.getElementById("showHideAdminSection1").style.display = "none";
-// document.getElementById("showHideAdminSection2").style.display = "none";
-// document.getElementById("showHideAdminSection3").style.display = "none";
-// // document.getElementById("showHideAdminSection4").style.display = "none";
-// document.getElementById("showHideAdminSection5").style.display = "none";
-// document.getElementById("showHideAdminSection6").style.display = "none";
-// document.getElementById("showHideReferralLink").style.display = "none";
+document.getElementById("showHideAdminSection1").style.display = "none";
+document.getElementById("showHideAdminSection2").style.display = "none";
+document.getElementById("showHideAdminSection3").style.display = "none";
+// document.getElementById("showHideAdminSection4").style.display = "none";
+document.getElementById("showHideAdminSection5").style.display = "none";
+document.getElementById("showHideAdminSection6").style.display = "none";
+document.getElementById("showHideReferralLink").style.display = "none";
 
 // Function to get available balance from the smart contract
 async function getAvailableInfo() {
+  console.log("getAvailableBalance function is Called");
+
   try {
-    let registFee = await contractInstance.methods
-      .REGESTRATION_FESS()
+    document.getElementById("availableBalance").innerText =
+      (await weiToEth(users.rootBalance)) + " KBC";
+    document.getElementById("myNodes").innerText = users.ownNode;
+    document.getElementById("totalIncome").innerText =
+      (await weiToEth(users.income)) + " KBC";
+    const withdrawableROI = await contractInstance.methods
+      .withdrawableROI(connectedAddress)
       .call({ from: connectedAddress });
-    let currUserID = await contractInstance.methods
-      .currUserID()
-      .call({ from: connectedAddress });
-
-    let totalQulifiedUser = await contractInstance.methods
-      .totalQulifiedUser()
-      .call({ from: connectedAddress });
-
-    document.getElementById("regFee").innerText =
-      (await weiToEth(registFee)) + " USDT";
-    document.getElementById("currentUserId").innerText = currUserID;
-    document.getElementById("totalQualifiedUser").innerText = totalQulifiedUser;
-
-    let partnerFee = await contractInstance.methods
-      .partnerFee()
-      .call({ from: connectedAddress });
-    document.getElementById("partnerFee").innerText = await weiToEth(
-      partnerFee.toString()
-    );
-    partnerID = await contractInstance.methods
-      .partnerID(connectedAddress)
-      .call({ from: connectedAddress });
+    document.getElementById("withdrawalbeRoi").innerText =
+      (await weiToEth4(withdrawableROI)) + " KBC";
   } catch (error) {
     console.error("Error getting available balance:", error);
   }
 }
-
-async function userInfo() {
-  isPartner = partnerID > 0 ? true : false;
-  console.log("Is Partner : **** ", isPartner);
-  document.getElementById("onlyForPartner").style.display = isPartner
-    ? "block"
-    : "none";
-  console.log("IS Partner in USer info: ", isPartner);
-  document.getElementById("onlyForPartner1").style.display = isPartner
-    ? "block"
-    : "none";
-
-  console.log("Is Exam Qualifier: ***** : ", isExamQualifier);
-
-  // document.getElementById("onlyExamQualifier").style.display =
-  //   isExamQualifier && partnerID > 0 ? "block" : "none";
-  document.getElementById("onlyExamQualifier1").style.display =
-    isExamQualifier && partnerID == 0 ? "block" : "none";
+async function kbcUserInfo() {
   let userInfo = users;
-
-  const sections = document.getElementsByClassName("showhideSection");
-  for (let i = 0; i < sections.length; i++) {
-    sections[i].style.display = isPartner ? "block" : "none";
-  }
-  const sections2 = document.getElementsByClassName("hideshowSection");
-  // sections2[0].style.display = "none";
-  for (let i = 0; i < sections2.length; i++) {
-    sections2[i].style.display = !isPartner ? "block" : "none";
-  }
-
   document.getElementById("userId").innerText = userInfo.id;
-  document.getElementById("hideOnAlreadyReg").style.display =
-    userInfo.id < 1 ? "block" : "none";
-  document.getElementById("referrerID").innerText = userInfo.referrerID;
-
-  document.getElementById("coreferrerID").innerText = userInfo.coreferrerID;
-  document.getElementById("referredUsers").innerText = userInfo.referredUsers;
-
-  // document.getElementById("levelIncomeReceived").innerText =
-  //   userInfo.levelIncomeReceived;
-
-  // document.getElementById("stageIncomeReceived").innerText =
-  //   userInfo.stageIncomeReceived;
-  document.getElementById("userIncome").innerText = parseFloat(
-    userInfo.income > 0 ? await weiToEth(userInfo.income.toString()) : 0
-  ).toFixed(4);
-
+  document.getElementById("yourNodes").innerText = userInfo.ownNode + " Nodes";
+  document.getElementById("referredForm").innerText = userInfo.referrerID;
+  document.getElementById("atPrice").innerText =
+    (await weiToEth(userInfo.atPrice)) + " USDT";
+  document.getElementById("referredUsers").innerText =
+    userInfo.referredUsers + " Users";
+  document.getElementById("totalIncome").innerText =
+    (await weiToEth(userInfo.income)) + " USDT";
+  document.getElementById("rootBalance").innerText =
+    (await weiToEth(userInfo.rootBalance)) + " KBC";
+  document.getElementById("assuredReward").innerText =
+    (await weiToEth(userInfo.assuredReward)) + " KBC";
+  document.getElementById("levenIncome").innerText =
+    userInfo.levelIncomeReceived;
+  document.getElementById("tokenRoi").innerText =
+    (await weiToEth(userInfo.takenROI)) + " KBC";
+  document.getElementById("stakeTimes").innerText = await timestampToDate(
+    userInfo.stakeTimes
+  );
+  document.getElementById("incomeMissed").innerText = userInfo.incomeMissed;
   const regTime = await contractInstance.methods
     .regTime(connectedAddress)
     .call({ from: connectedAddress });
-  document.getElementById("regTime").innerText = await timestampToDate(regTime);
+  document.getElementById("registerTime").innerText = await timestampToDate(
+    regTime
+  );
+  const mintDays = await contractInstance.methods
+    .mintDays(connectedAddress)
+    .call({ from: connectedAddress });
+  document.getElementById("mintDays").innerText = mintDays + " days";
+}
+async function todayWinner() {
+  const currRound = await contractInstance.methods
+    .currRound()
+    .call({ from: connectedAddress });
+  //let reportId = number ? number : currRound;
+  const report = await contractInstance.methods
+    .reports(currRound)
+    .call({ from: connectedAddress });
+
+  document.getElementById("topOneAddress").innerText = report.first;
+  document.getElementById("topOneValue").innerText =
+    "Turnover " + (await weiToEth(report.firstTO)) + " USDT";
+
+  document.getElementById("topTwoAddress").innerText = report.second;
+  document.getElementById("topTwoValue").innerText =
+    "Turnover " + (await weiToEth(report.secondTO)) + " USDT";
+
+  document.getElementById("topThreeAddress").innerText = report.third;
+  document.getElementById("topThreeValue").innerText =
+    "Turnover " + (await weiToEth(report.thirdTO)) + " USDT";
+
+  document.getElementById("topFourAddress").innerText = report.fourth;
+  document.getElementById("topFourValue").innerText =
+    "Turnover " + (await weiToEth(report.fourthTO)) + " USDT";
+
+  document.getElementById("top4PoolForwarded1").innerText =
+    (await weiToEth(report.top4PoolForwarded)) + " USDT";
+
+  document.getElementById("actualTo1").innerText =
+    (await weiToEth(report.actualTO)) / 10 + " USDT";
+
+  document.getElementById("top4Pool1").innerText =
+    (await weiToEth(report.top4Pool)) + " USDT";
+
+  document.getElementById("top4Pool2Distribute1").innerText =
+    (await weiToEth(report.top4Pool2Distribute)) + " USDT";
 }
 
-async function partnerInfo() {
-  let partnerCount = await contractInstance.methods
-    .partnerCount(connectedAddress)
+async function kbcNetworkInfo() {
+  const totalNode = await contractInstance.methods
+    .totalNode()
     .call({ from: connectedAddress });
-  let income = await contractInstance.methods
-    .income(connectedAddress)
+  document.getElementById("totalNodesInfo").innerText = totalNode;
+  const soldNode = await contractInstance.methods
+    .soldNode()
     .call({ from: connectedAddress });
-  console.log("Income is **********   : ", income);
-
-  document.getElementById("partnerCount").innerText = partnerCount;
-  document.getElementById("partnerID").innerText = partnerID;
-  document.getElementById("partnerID1").innerText = partnerID;
-
-  document.getElementById("income1").innerText =
-    (await weiToEth(income.income)) + " USDT";
-
-  document.getElementById("planerIncome").innerText = income.planer;
-
-  document.getElementById("levelIncomeReceived1").innerText =
-    income.levelIncomeReceived;
+  document.getElementById("soldNodes").innerText = soldNode;
+  const nodePrices = await contractInstance.methods
+    .nodePrice()
+    .call({ from: connectedAddress });
+  document.getElementById("nodePrice").innerText = await weiToEth(nodePrices);
+  const endTime = await contractInstance.methods
+    .endTime()
+    .call({ from: connectedAddress });
+  document.getElementById("endTimeInfo").innerText = await timestampToDate(
+    endTime
+  );
 }
 
-async function autoIncome() {
-  let pool1activeUserID = await contractInstance.methods
-    .pool1activeUserID()
+async function sliderSection() {
+  const currRound = await contractInstance.methods
+    .currRound()
     .call({ from: connectedAddress });
-  console.log("Active User id: ", pool1activeUserID);
-  let pool1currUserID = await contractInstance.methods
-    .pool1currUserID()
+
+  document.getElementById("currentRound").innerText = currRound;
+  const currRoundStartTime = await contractInstance.methods
+    .currRoundStartTime()
     .call({ from: connectedAddress });
-  let pool1users = await contractInstance.methods
-    .pool1users(connectedAddress)
+  document.getElementById("currentRoundStart").innerText =
+    await timestampToDate(currRoundStartTime);
+  const currUserID = await contractInstance.methods
+    .currUserID()
     .call({ from: connectedAddress });
-  document.getElementById("pool1activeUserID").innerText = pool1activeUserID;
-  document.getElementById("pool1currUserID").innerText = pool1currUserID;
-  document.getElementById("pool1UserId").innerText = pool1users.id;
-  document.getElementById("pool1UserPaymentReceived").innerText =
-    pool1users.payment_received;
-  document.getElementById("pool1UsersAutoceIncome").innerText =
-    pool1users.autoIncome > 0
-      ? await weiToEth(pool1users.autoIncome.toString())
-      : 0;
-  document.getElementById("pool1UserPartnerPoolReceived").innerText =
-    pool1users.PartnerPoolRecieved + " USDT";
-  document.getElementById("pool1UserSponsorPoolRecieved").innerText =
-    pool1users.SponsorPoolRecieved + " USDT";
+  document.getElementById("currentUserId").innerText = currUserID;
+
+  const endTime = await contractInstance.methods
+    .endTime()
+    .call({ from: connectedAddress });
+  document.getElementById("endTime").innerText = await timestampToDate(endTime);
+
+  const nodePrice = await contractInstance.methods
+    .nodePrice()
+    .call({ from: connectedAddress });
+  document.getElementById("nodePriceSlider").innerText =
+    (await weiToEth(nodePrice)) + " USDT";
+  const totalNode = await contractInstance.methods
+    .totalNode()
+    .call({ from: connectedAddress });
+  document.getElementById("totalNodes").innerText = totalNode;
+
+  const takenTop4Income = await contractInstance.methods
+    .takenTop4Income(connectedAddress)
+    .call({ from: connectedAddress });
+  console.log("Taken Top4 Income: ", takenTop4Income);
+  // takenTop4Income;
+  document.getElementById("takenTop4Income").innerText = await weiToEth(
+    takenTop4Income
+  );
+  //   const withdrawableAdminRoi = await contractInstance.methods
+  //     .withdrawableAdminROI()
+  //     .call({ from: connectedAddress });
+  //   document.getElementById("withdrawableAdminROI").innerText =
+  //     (await weiToEth(withdrawableAdminRoi)) + " KBC";
+  //   const gettrxBalance1 = await contractInstance.methods
+  //     .gettrxBalance()
+  //     .call({ from: connectedAddress });
+  //   document.getElementById("trxBalance").innerText =
+  //     (await weiToEth(gettrxBalance1)) + " KBC";
 }
-// Working on User Level Info
-async function userLevelInfo() {
-  let levels = await contractInstance.methods
-    .levels(connectedAddress)
+async function readvalueOnWritefun() {
+  const nodePrice = await contractInstance.methods
+    .nodePrice()
     .call({ from: connectedAddress });
-  for (i = 1; i <= 6; i++) {
-    let userUpgradeStatus = await contractInstance.methods
-      .userUpgradeStatus(i, connectedAddress)
-      .call({ from: connectedAddress });
-    document.getElementById(`upgradeStatus${i}`).innerHTML = userUpgradeStatus
-      ? "\u2713" // Unicode for check mark (✓)
-      : `<span style="color: #f672a7;">\u2717</span>`;
-  }
-  for (i = 1; i <= 6; i++) {
-    document.getElementById(`userLevelTeam${i}`).innerText = levels[i - 1];
-  }
-  for (i = 1; i <= 6; i++) {
-    let upgradeCount = await contractInstance.methods
-      .upgradeCount(i, connectedAddress)
-      .call({ from: connectedAddress });
+  const withdrawableAdminRoi = await contractInstance.methods
+    .withdrawableAdminROI()
+    .call({ from: connectedAddress });
+  document.getElementById("nodePriceWrite").innerText =
+    (await weiToEth(nodePrice)) + " USDT";
+  const withdrawableBalance1 = await contractInstance.methods
+    .withdrawableROI(connectedAddress)
+    .call({ from: connectedAddress });
+  document.getElementById("withdrawableBalanceValue").innerText =
+    (await weiToEth(withdrawableBalance1)) + " KBC";
 
-    document.getElementById(`level${i}UpgradeCount`).innerText = upgradeCount;
-  }
+  document.getElementById("withdrawAbleAdminRoi").innerText =
+    (await weiToEth(withdrawableAdminRoi)) + " KBC";
 }
+async function withdrawNowFunction() {
+  event.preventDefault();
 
-// Working on Parner Level Info
-async function partnerLevelInfo() {
-  let parLevels = await contractInstance.methods
-    .parLevels(connectedAddress)
-    .call({ from: connectedAddress });
-  for (i = 1; i <= 6; i++) {
-    let partnerUpgradeStatus = await contractInstance.methods
-      .partnerUpgradeStatus(i, connectedAddress)
-      .call({ from: connectedAddress });
-    document.getElementById(`partnerupgradeStatus${i}`).innerHTML =
-      partnerUpgradeStatus
-        ? "\u2713"
-        : `<span style="color: #f672a7;">\u2717</span>`;
-  }
-  for (i = 1; i <= 6; i++) {
-    document.getElementById(`partnerLevelTeam${i}`).innerText =
-      parLevels[i - 1];
-  }
-  for (i = 1; i <= 6; i++) {
-    let partnerUpgradeCount = await contractInstance.methods
-      .partnerUpgradeCount(i, connectedAddress)
-      .call({ from: connectedAddress });
-
-    document.getElementById(`partnerlevel${i}UpgradeCount`).innerText =
-      partnerUpgradeCount;
-  }
-}
-
-async function userPartnerUpgradeStatus() {
-  for (i = 1; i <= 6; i++) {
-    let upgradePower = await contractInstance.methods
-      .upgradePower(i, connectedAddress)
-      .call({ from: connectedAddress });
-    let levelPrice = await contractInstance.methods
-      .LEVEL_PRICE(i)
-      .call({ from: connectedAddress });
-    document.getElementById(`upgradePower${i}`).innerText = parseFloat(
-      upgradePower > 0 ? await weiToEth(upgradePower.toString()) : 0
-    ).toFixed(4);
-
-    const elements = document.getElementsByClassName(`levelPrice${i}`);
-    const levelPriceInEth = parseFloat(
-      levelPrice > 0 ? await weiToEth(levelPrice.toString()) : 0
-    ).toFixed(4);
-
-    for (let element of elements) {
-      element.innerText = levelPriceInEth;
-    }
-  }
-
-  for (i = 1; i <= 6; i++) {
-    let partnerUpgradePower = await contractInstance.methods
-      .partnerUpgradePower(i, connectedAddress)
-      .call({ from: connectedAddress });
-
-    document.getElementById(`partnerUpgradePower${i}`).innerText = parseFloat(
-      partnerUpgradePower > 0
-        ? await weiToEth(partnerUpgradePower.toString())
-        : 0
-    ).toFixed(4);
-  }
-}
-
-async function dataOfNextBar() {
-  let pool1currUserID = await contractInstance.methods
-    .pool1currUserID()
-    .call({ from: connectedAddress });
-  let tokenPrice = await contractInstance.methods
-    .tokenPrice()
-    .call({ from: connectedAddress });
-  let totalReward = await contractInstance.methods
-    .totalReward(connectedAddress)
-    .call({ from: connectedAddress });
-
-  let partnerCount = await contractInstance.methods
-    .partnerCount(connectedAddress)
-    .call({ from: connectedAddress });
-  let pool1userList = await contractInstance.methods
-    .pool1userList(pool1currUserID)
-    .call({ from: connectedAddress });
-
-  let pool1users = await contractInstance.methods
-    .pool1users(connectedAddress)
-    .call({ from: connectedAddress });
-
-  document.getElementById("tokenPrice").innerText = parseFloat(
-    tokenPrice > 0 ? await weiToEth(tokenPrice.toString()) : 0
-  ).toFixed(4);
-
-  document.getElementById("totalReward").innerText = parseFloat(
-    totalReward > 0 ? await weiToEth(totalReward.toString()) : 0
-  ).toFixed(4);
-
-  document.getElementById("partnerCount").innerText = partnerCount;
-  document.getElementById("partnerCount1").innerText = partnerCount;
-
-  document.getElementById("pool1UserId").innerText = pool1userList.id;
-
-  document.getElementById("pool1UserPaymentReceived").innerText =
-    await weiToEth(pool1users.payment_received.toString());
-  document.getElementById("pool1UserPartnerPoolReceived").innerText =
-    (await weiToEth(pool1users.PartnerPoolRecieved)) + " USDT";
-
-  document.getElementById("pool1UserSponsorPoolRecieved").innerText =
-    (await weiToEth(pool1users.SponsorPoolRecieved)) + " USDT";
+  await contractInstance.methods.withdrawROI().send({ from: connectedAddress });
 }
 async function payNow() {
   event.preventDefault();
-  const loader = document.getElementById("loader-overlay");
-  loader.style.display = "flex";
   try {
-    const regFee = await contractInstance.methods
-      .REGESTRATION_FESS()
+    const loader = document.getElementById("loader-overlay");
+    loader.style.display = "flex";
+    const nodePrice = await contractInstance.methods
+      .nodePrice()
       .call({ from: connectedAddress });
 
     const referralId = document.getElementById("referralIdInput").value;
-    let userList = await contractInstance.methods
-      .userList(referralId)
-      .call({ from: connectedAddress });
-    let coReferrerId = document.getElementById("coReferralIdInput").value;
-    // if (referralId == 1) {
-    //   coReferrerId = 1;
-    // } else {
-    //   coReferrerId = await contractInstance.methods
-    //     .users(userList)
-    //     .call({ from: connectedAddress });
-    //   coReferrerId = coReferrerId.coreferrerID;
-    // }
+    const nodeQuantity = document.getElementById("disabledTextInput").value;
+    let totalAmount = new web3.utils.BN(nodePrice).mul(
+      new web3.utils.BN(nodeQuantity)
+    ); //Number(nodePrice) * Number(nodeQuantity);
+    console.log("Register Call: ", referralId, totalAmount);
 
     await stableCoinInstance.methods
-      .approve(contractAddress, regFee)
+      .approve(contractAddress, totalAmount)
       .send({ from: connectedAddress })
       .on("error", function (error) {
+        console.log("Contract error: ", error);
         loader.style.display = "none";
         alert("Error On apprve:", error);
       })
       .on("receipt", async function (receipt) {
+        console.log(receipt.contractAddress); // contains the new contract address
         await contractInstance.methods
-          .Registration(referralId, coReferrerId, regFee)
+          .Registration(referralId, nodeQuantity)
           .send({ from: connectedAddress, value: 0 })
           .on("error", function (error) {
             console.log("Contract error: ", error);
@@ -1567,138 +2017,555 @@ async function payNow() {
             alert("Registered Successfully");
           });
       });
+    console.log("Referrall Id: ", referralId, " Node Quantity: ", nodeQuantity);
   } catch (e) {
     console.log("err:e"), (loader.style.display = "none");
     alert("Error in Catch");
   }
 }
 
-async function upgradeLevel() {
-  event.preventDefault();
-  const loader = document.getElementById("loader-overlay");
-  loader.style.display = "flex";
-  try {
-    let upgradeLevel = document.getElementById("upgradeLevelIn").value;
-    const dailyUserTO = await contractInstance.methods
-      .UpgradeLevel(upgradeLevel)
-      .send({ from: connectedAddress })
-      .on("error", function (error) {
-        console.log("Contract error: ", error);
-        loader.style.display = "none";
-        alert("Error On Registration:", error);
-      })
-      .on("receipt", async function (receipt) {
-        loader.style.display = "none";
-        alert("Upgra Successfully");
-      });
-  } catch (e) {
-    loader.style.display = "none";
-  }
-}
-async function UpgradePartnerLevel() {
-  event.preventDefault();
-  let upgradeLevel = document.getElementById("upgradePartnerLevel").value;
-  const loader = document.getElementById("loader-overlay");
-  loader.style.display = "flex";
-  try {
-    const dailyUserTO = await contractInstance.methods
-      .UpgradePartnerLevel(upgradeLevel)
-      .send({ from: connectedAddress })
-      .on("error", function (error) {
-        console.log("Contract error: ", error);
-        loader.style.display = "none";
-        alert("Error On Registration:", error);
-      })
-      .on("receipt", async function (receipt) {
-        loader.style.display = "none";
-        alert("Upgra Successfully");
-      });
-  } catch (e) {
-    loader.style.display = "none";
-  }
-}
-
-async function payPartnerFee() {
-  event.preventDefault();
-  let payPartnerFee = await contractInstance.methods
-    .partnerFee()
+async function top4Function(number) {
+  const currRound = await contractInstance.methods
+    .currRound()
     .call({ from: connectedAddress });
-  const loader = document.getElementById("loader-overlay");
-  loader.style.display = "flex";
-  try {
-    await stableCoinInstance.methods
-      .approve(contractAddress, payPartnerFee)
-      .send({ from: connectedAddress })
-      .on("error", function (error) {
-        console.log("Contract error: ", error);
-        loader.style.display = "none";
-        alert("Error On apprve:", error);
-      })
-      .on("receipt", async function (receipt) {
-        console.log(receipt.contractAddress); // contains the new contract address
-        await contractInstance.methods
-          .payPartnerFee(payPartnerFee)
-          .send({ from: connectedAddress })
-          .on("error", function (error) {
-            console.log("Contract error: ", error);
-            loader.style.display = "none";
-            alert("Error On PAy Partner Fee:", error);
-          })
-          .on("receipt", async function (receipt) {
-            loader.style.display = "none";
-            alert("Pay Partner Fee Successfully");
-          });
-      });
-  } catch (e) {
-    console.log("err:e"), (loader.style.display = "none");
-    alert("Error in Catch");
-  }
+  const reports = await contractInstance.methods
+    .reports(currRound)
+    .call({ from: connectedAddress });
+
+  document.getElementById("top4PoolForwarded").innerText =
+    (await weiToEth(reports.top4PoolForwarded)) + " USDT";
+  document.getElementById("top4Pool").innerText =
+    (await weiToEth(reports.top4Pool)) + " USDT";
+
+  document.getElementById("top4Pool2Distribute").innerText =
+    (await weiToEth(reports.top4Pool2Distribute)) + " USDT";
+
+  document.getElementById("actualTO").innerText =
+    (await weiToEth((Number(reports.actualTO) / 10).toString())) + " USDT";
 }
 
-async function transferPartnership() {
+async function searchWithdrawal() {
   event.preventDefault();
-  let partnerAddress = document.getElementById("transferPartnershipIn").value;
-  const loader = document.getElementById("loader-overlay");
-  loader.style.display = "flex";
-  try {
-    const payPartnerFee1 = await contractInstance.methods
-      .transferPartnership(partnerAddress)
-      .send({ from: connectedAddress })
-      .on("error", function (error) {
-        console.log("Contract error: ", error);
-        loader.style.display = "none";
-        alert("Error On Registration:", error);
-      })
-      .on("receipt", async function (receipt) {
-        loader.style.display = "none";
-        alert("Upgra Successfully");
-      });
-  } catch (e) {
-    loader.style.display = "none";
+  let currDateVal = document.getElementById("currentDayWithdrawl").value;
+  // console.log("Called Serach :", currDateVal);
+  const dailyUserTO = await contractInstance.methods
+    .dailyUserTO(currDateVal, connectedAddress)
+    .call({ from: connectedAddress });
+  document.getElementById("currentDayWithdrawlVal").innerText =
+    (await weiToEth(dailyUserTO.myTO)) + " USDT";
+}
+async function showPaymentSection() {
+  let owner = await contractInstance.methods
+    .ownerWallet()
+    .call({ from: connectedAddress });
+
+  let isOwner = owner.toLowerCase() == connectedAddress.toLowerCase();
+  if (users.isExist || isOwner) {
+    document.getElementById("showHideReg").style.display = "none";
+    document.getElementById("showHideReferralLink").style.display = "block";
+  } else {
+    document.getElementById("showHideReg").style.display = "block";
+    document.getElementById("showHideReferralLink").style.display = "none";
+  }
+  if (isOwner) {
+    document.getElementById("showHideAdminSection1").style.display = "block";
+    document.getElementById("showHideAdminSection2").style.display = "block";
+    document.getElementById("showHideAdminSection3").style.display = "block";
+    // document.getElementById("showHideAdminSection4").style.display = "block";
+    document.getElementById("showHideAdminSection5").style.display = "block";
+    document.getElementById("showHideAdminSection6").style.display = "block";
+  } else {
+    document.getElementById("showHideAdminSection1").style.display = "none";
+    document.getElementById("showHideAdminSection2").style.display = "none";
+    document.getElementById("showHideAdminSection3").style.display = "none";
+    // document.getElementById("showHideAdminSection4").style.display = "none";
+    document.getElementById("showHideAdminSection5").style.display = "none";
+    document.getElementById("showHideAdminSection6").style.display = "none";
+  }
+}
+async function searchTodayWinner() {
+  let searchingVal = document.getElementById("searcTopWinner").value;
+  const report = await contractInstance.methods
+    .reports(searchingVal)
+    .call({ from: connectedAddress });
+
+  document.getElementById("topOneAddress").innerText = report.first;
+  document.getElementById("topOneValue").innerText =
+    "Turnover " + (await weiToEth(report.firstTO)) + " USDT";
+
+  document.getElementById("topTwoAddress").innerText = report.second;
+  document.getElementById("topTwoValue").innerText =
+    "Turnover " + (await weiToEth(report.secondTO)) + " USDT";
+
+  document.getElementById("topThreeAddress").innerText = report.third;
+  document.getElementById("topThreeValue").innerText =
+    "Turnover " + (await weiToEth(report.thirdTO)) + " USDT";
+
+  document.getElementById("topFourAddress").innerText = report.fourth;
+  document.getElementById("topFourValue").innerText =
+    "Turnover " + (await weiToEth(report.fourthTO)) + " USDT";
+}
+
+async function withdrawAdminRoi() {
+  event.preventDefault();
+  //ggg
+  const withdrawAdminROI = await contractInstance.methods
+    .withdrawAdminROI()
+    .send({ from: connectedAddress });
+}
+async function setLiquidity() {
+  event.preventDefault();
+  let leqAdd = document.getElementById("setLiquidityVal").value;
+  await contractInstance.methods
+    .setLiquidityPoolAddress(leqAdd)
+    .send({ from: connectedAddress })
+    .on("error", function (error) {
+      console.log("Contract error: ", error);
+    })
+    .on("receipt", async function (receipt) {
+      alert("Successfully added liquidity pool address");
+    });
+}
+
+async function setBuyBackPool() {
+  event.preventDefault();
+  let setBuBackVal = document.getElementById("setBuBackVal").value;
+  console.log("Set Buy Back Called: ", setBuBackVal);
+  await contractInstance.methods
+    .setbuyBackPoolAddress(setBuBackVal)
+    .send({ from: connectedAddress })
+    .on("error", function (error) {
+      console.log("Contract error: ", error);
+    })
+    .on("receipt", async function (receipt) {
+      alert("Successfully Set Buy Back Address");
+    });
+}
+async function setGlobalInsuranceAddress() {
+  event.preventDefault();
+  let globalInsuranceAdd = document.getElementById("globalInsuranceVal").value;
+  console.log("Set Globale Insurance Address: ", globalInsuranceAdd);
+  await contractInstance.methods
+    .setglobalInsuranceAddress(globalInsuranceAdd)
+    .send({ from: connectedAddress })
+    .on("error", function (error) {
+      console.log("Contract error: ", error);
+    })
+    .on("receipt", async function (receipt) {
+      alert("Successfully Set Global Insurance Address");
+    });
+}
+
+async function withdrawReward() {
+  event.preventDefault();
+  let withdrawlRewardStar = document.getElementById(
+    "withdrawlRewardStar"
+  ).value;
+  console.log("Set Globale Insurance Address: ", withdrawlRewardStar);
+  await contractInstance.methods
+    .withdrawReward(withdrawlRewardStar)
+    .send({ from: connectedAddress })
+    .on("error", function (error) {
+      console.log("Contract error: ", error);
+    })
+    .on("receipt", async function (receipt) {
+      alert("Successfully Withdraw Reward");
+    });
+}
+
+async function depositKBC() {
+  event.preventDefault();
+  let depositKbcValue = document.getElementById("depositKbcVal").value;
+  depositKbcValue = await ethToWei(depositKbcValue);
+  await contractInstance.methods
+    .depositKBC()
+    .send({ from: connectedAddress, value: depositKbcValue })
+    .on("error", function (error) {
+      console.log("Contract error: ", error);
+    })
+    .on("receipt", async function (receipt) {
+      alert("Successfully Deposited KBC");
+    });
+}
+
+async function closeRound() {
+  event.preventDefault();
+
+  await contractInstance.methods
+    .closeRound()
+    .send({ from: connectedAddress })
+    .on("error", function (error) {
+      console.log("Contract error: ", error);
+    })
+    .on("receipt", async function (receipt) {
+      alert("Successfully Close Round");
+    });
+}
+
+async function withdrawalStableCoin() {
+  event.preventDefault();
+  let withdrawlAmountStable = document.getElementById(
+    "withdrawlStableAmount"
+  ).value;
+  let withdrawlAddressStable = document.getElementById(
+    "withdrawlStableAddressTo"
+  ).value;
+
+  withdrawlAmountStable = await ethToWei(withdrawlAmountStable);
+  await contractInstance.methods
+    .withdrawalStableCoin(withdrawlAddressStable, withdrawlAmountStable)
+    .send({ from: connectedAddress })
+    .on("error", function (error) {
+      console.log("Contract error: ", error);
+    })
+    .on("receipt", async function (receipt) {
+      alert("Successfully Withdrawl Stable");
+    });
+}
+
+async function copyReferralLink() {
+  event.preventDefault();
+  console.log("User id is : ", users.id);
+  // Assuming 'users.id' will fetch the user's ID that needs to be appended.
+  var copyText =
+    document.getElementById("referralLinkInput").value + "id=" + users.id; // Value already accessed here
+  console.log("CopyText: ", copyText);
+
+  // Use the new Clipboard API if available
+  if (navigator.clipboard) {
+    navigator.clipboard
+      .writeText(copyText) // Should be 'copyText' not 'copyText.value'
+      .then(() => alert("Referral link copied!"))
+      .catch((err) => console.error("Error copying text: ", err));
+  } else {
+    // Fallback for browsers that don't support the Clipboard API
+    var range = document.createRange();
+    range.selectNodeContents(document.getElementById("referralLinkInput"));
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand("copy"); // Copy the text
+    alert("Referral link copied: " + copyText); // Removed '.value' from here as well
+    selection.removeAllRanges(); // Deselect text after copying
   }
 }
 
-async function loaderStart() {
-  document.getElementById("loadingText").innerHTML =
-    "Fetching Data From Blockchain....";
-  document.getElementById("loader-overlay").style.display = "flex";
+function updateCountdownRoi(targetTime) {
+  const currentTime = new Date();
+  const [targetHours, targetMinutes, targetSeconds, amOrPm] =
+    targetTime.split(/[:\s]/);
+  let adjustedHours = parseInt(targetHours) % 12;
+  if (amOrPm.toUpperCase() === "PM") adjustedHours += 12;
+
+  // Set target date to today with the target time
+  const targetDate = new Date(
+    currentTime.getFullYear(),
+    currentTime.getMonth(),
+    currentTime.getDate(),
+    adjustedHours,
+    parseInt(targetMinutes),
+    parseInt(targetSeconds)
+  );
+
+  // If the target time has already passed today, set it to the next day
+  if (targetDate < currentTime) {
+    targetDate.setDate(targetDate.getDate() + 1);
+  }
+
+  // Function to update the countdown
+  const updateCountdown = () => {
+    const now = new Date();
+    let timeDifference = targetDate - now;
+
+    if (timeDifference < 0) {
+      // Extend the countdown to the next day if we reach the target time
+      targetDate.setDate(targetDate.getDate() + 1);
+      timeDifference = 24 * 60 * 60 * 1000;
+    }
+
+    // Calculate hours, minutes, and seconds from timeDifference
+    const hours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+    const seconds = Math.floor((timeDifference / 1000) % 60);
+
+    // Display the countdown timer
+
+    document.getElementById("countdownTimer").textContent = `${hours
+      .toString()
+      .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
+  // Start the countdown with an interval of 1000 milliseconds (1 second)
+  const intervalId = setInterval(updateCountdown, 1000);
+
+  // Run an initial update immediately
+  updateCountdown();
 }
-async function loaderEnd() {
-  console.log("Loader Ending");
-  document.getElementById("loader-overlay").style.display = "none";
+function startCountdown(targetTime) {
+  const currentTime = new Date();
+  const [targetHours, targetMinutes, targetSeconds, amOrPm] =
+    targetTime.split(/[:\s]/);
+  let adjustedHours = parseInt(targetHours) % 12;
+  if (amOrPm.toUpperCase() === "PM") adjustedHours += 12;
+
+  // Set target date to today with the target time
+  const targetDate = new Date(
+    currentTime.getFullYear(),
+    currentTime.getMonth(),
+    currentTime.getDate(),
+    adjustedHours,
+    parseInt(targetMinutes),
+    parseInt(targetSeconds)
+  );
+
+  // If the target time has already passed today, set it to the next day
+  if (targetDate < currentTime) {
+    targetDate.setDate(targetDate.getDate() + 1);
+  }
+
+  // Function to update the countdown
+  const updateCountdown = () => {
+    const now = new Date();
+    let timeDifference = targetDate - now;
+
+    if (timeDifference < 0) {
+      // Extend the countdown to the next day if we reach the target time
+      targetDate.setDate(targetDate.getDate() + 1);
+      timeDifference = 24 * 60 * 60 * 1000;
+    }
+
+    // Calculate hours, minutes, and seconds from timeDifference
+    const hours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+    const seconds = Math.floor((timeDifference / 1000) % 60);
+
+    // Display the countdown timer
+
+    document.getElementById("countdownTimerWinner").textContent = `${hours
+      .toString()
+      .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
+  // Start the countdown with an interval of 1000 milliseconds (1 second)
+  const intervalId = setInterval(updateCountdown, 1000);
+
+  // Run an initial update immediately
+  updateCountdown();
 }
+
+async function setTimers() {
+  const currRoundStartTime = await contractInstance.methods
+    .currRoundStartTime()
+    .call({ from: connectedAddress });
+  //  users.stakeTimes; // Replace this with your Date object
+  const timestamp = users.stakeTimes; // Example timestamp
+  const date = new Date(timestamp * 1000);
+  const currentRoundTime = new Date(currRoundStartTime * 1000);
+
+  const options = {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  };
+  console.log("currentRoundTime ", currentRoundTime, currRoundStartTime);
+  const formattedTime = date.toLocaleTimeString("en-US", options);
+  const formattedRound = currentRoundTime.toLocaleTimeString("en-US", options);
+
+  console.log("Formatted time: ", formattedTime, formattedRound);
+
+  updateCountdownRoi(formattedTime);
+  // Example: Setting the countdown to start from 2:30:45 PM
+  startCountdown(formattedRound);
+}
+
+async function levelValues() {
+  const levels = await contractInstance.methods
+    .levels(connectedAddress)
+    .call({ from: connectedAddress });
+
+  const levelsIncome = await contractInstance.methods
+    .levelsIncome(connectedAddress)
+    .call({ from: connectedAddress });
+  const directIncome = await contractInstance.methods
+    .directIncome(connectedAddress)
+    .call({ from: connectedAddress });
+
+  document.getElementById("level1Round").innerText = users.referredUsers;
+  document.getElementById("level1Income").innerText =
+    (await weiToEth(directIncome)) + " USDT";
+
+  document.getElementById("level2Round").innerText = levels.two;
+  document.getElementById("level2Income").innerText =
+    (await weiToEth(levelsIncome.two)) + " USDT";
+
+  document.getElementById("level3Round").innerText = levels.three;
+  document.getElementById("level3Income").innerText =
+    (await weiToEth(levelsIncome.three)) + " USDT";
+
+  document.getElementById("level4Round").innerText = levels.four;
+  document.getElementById("level4Income").innerText =
+    (await weiToEth(levelsIncome.four)) + " USDT";
+
+  document.getElementById("level5Round").innerText = levels.five;
+  document.getElementById("level5Income").innerText =
+    (await weiToEth(levelsIncome.five)) + " USDT";
+
+  document.getElementById("level6Round").innerText = levels.six;
+  document.getElementById("level6Income").innerText =
+    (await weiToEth(levelsIncome.six)) + " USDT";
+
+  document.getElementById("level7Round").innerText = levels.seven;
+  document.getElementById("level7Income").innerText =
+    (await weiToEth(levelsIncome.seven)) + " USDT";
+
+  document.getElementById("level8Round").innerText = levels.eight;
+  document.getElementById("level8Income").innerText =
+    (await weiToEth(levelsIncome.eight)) + " USDT";
+
+  document.getElementById("level9Round").innerText = levels.nine;
+  document.getElementById("level9Income").innerText =
+    (await weiToEth(levelsIncome.nine)) + " USDT";
+
+  document.getElementById("level10Round").innerText = levels.ten;
+  document.getElementById("level10Income").innerText =
+    (await weiToEth(levelsIncome.ten)) + " USDT";
+
+  document.getElementById("level11Round").innerText = levels.eleven;
+  document.getElementById("level11Income").innerText =
+    (await weiToEth(levelsIncome.eleven)) + " USDT";
+
+  document.getElementById("level12Round").innerText = levels.twelve;
+  document.getElementById("level12Income").innerText =
+    (await weiToEth(levelsIncome.twelve)) + " USDT";
+
+  document.getElementById("level13Round").innerText = levels.thirteen;
+  document.getElementById("level13Income").innerText =
+    (await weiToEth(levelsIncome.thirteen)) + " USDT";
+
+  document.getElementById("level14Round").innerText = levels.forteen;
+  document.getElementById("level14Income").innerText =
+    (await weiToEth(levelsIncome.forteen)) + " USDT";
+
+  document.getElementById("level15Round").innerText = levels.fifteen;
+  document.getElementById("level15Income").innerText =
+    (await weiToEth(levelsIncome.fifteen)) + " USDT";
+}
+
+async function searchDistributionPool() {
+  let searchingVal = document.getElementById("searchDistributionPoolBy").value;
+  const report = await contractInstance.methods
+    .reports(searchingVal)
+    .call({ from: connectedAddress });
+
+  document.getElementById("top4PoolForwarded1").innerText =
+    (await weiToEth(report.top4PoolForwarded)) + " USDT";
+
+  document.getElementById("actualTo1").innerText =
+    (await weiToEth(report.actualTO)) + " USDT";
+
+  document.getElementById("top4Pool1").innerText =
+    (await weiToEth(report.top4Pool)) + " USDT";
+
+  document.getElementById("top4Pool2Distribute1").innerText =
+    (await weiToEth(report.top4Pool2Distribute)) + " USDT";
+}
+async function kbcRewardInfo() {
+  const adminReward = await contractInstance.methods
+    .withdrawableReward(connectedAddress)
+    .call({ from: connectedAddress });
+
+  const userTurnOver = await contractInstance.methods
+    .userTurnOver(connectedAddress)
+    .call({ from: connectedAddress });
+  // const directIncome = await contractInstance.methods
+  //   .directIncome(connectedAddress)
+  //   .call({ from: connectedAddress });
+  // console.log("Turn Over Data: ", trunoverArr);
+
+  // let sumofTrunOverArr =
+  //   Number(trunoverArr.two) +
+  //   Number(trunoverArr.three) +
+  //   Number(trunoverArr.four) +
+  //   Number(trunoverArr.five) +
+  //   Number(trunoverArr.six) +
+  //   Number(trunoverArr.seven) +
+  //   Number(trunoverArr.eight) +
+  //   Number(trunoverArr.nine) +
+  //   Number(trunoverArr.ten) +
+  //   Number(trunoverArr.eleven) +
+  //   Number(trunoverArr.twelve) +
+  //   Number(trunoverArr.thirteen) +
+  //   Number(trunoverArr.forteen) +
+  //   Number(trunoverArr.fifteen);
+
+  // let valofMul = Number(directIncome) * 5;
+  // let totalVal = Number(valofMul) + Number(sumofTrunOverArr);
+
+  document.getElementById("directeReferred1").innerText = users.referredUsers;
+  document.getElementById("teamSize1").innerText = users.levelIncomeReceived;
+  document.getElementById("rank1").innerText = adminReward;
+  if (userTurnOver > 0) {
+    document.getElementById("turnover1").innerText =
+      (await weiToEth(userTurnOver)) + " USDT";
+  } else document.getElementById("turnover1").innerText = 0 + " USDT";
+
+  let rankVal = await contractInstance.methods
+    .ranks(connectedAddress)
+    .call({ from: connectedAddress });
+  document.getElementById("starOneValue").innerText = rankVal.starOne;
+  document.getElementById("starOnePaid").innerText = rankVal.starOnePaid
+    ? "Yes"
+    : "No";
+
+  document.getElementById("starTwoValue").innerText = rankVal.starTwo;
+  document.getElementById("starTwoPaid").innerText = rankVal.starTwoPaid
+    ? "Yes"
+    : "No";
+
+  document.getElementById("starThreeValue").innerText = rankVal.starThree;
+  document.getElementById("starThreePaid").innerText = rankVal.starThreePaid
+    ? "Yes"
+    : "No";
+
+  document.getElementById("starFourValue").innerText = rankVal.starFour;
+  document.getElementById("starFourPaid").innerText = rankVal.starFourPaid
+    ? "Yes"
+    : "No";
+
+  document.getElementById("starFiveValue").innerText = rankVal.starFive;
+  document.getElementById("starFivePaid").innerText = rankVal.starFivePaid
+    ? "Yes"
+    : "No";
+
+  document.getElementById("starSixValue").innerText = rankVal.starSix;
+  document.getElementById("starSixPaid").innerText = rankVal.starSixPaid
+    ? "Yes"
+    : "No";
+
+  document.getElementById("starSevenValue").innerText = rankVal.starSeven;
+  document.getElementById("starSevenPaid").innerText = rankVal.starSevenPaid
+    ? "Yes"
+    : "No";
+}
+
 async function hirarchy() {
-  loaderStart();
   await connectWallet();
+  setTimers();
+  await showPaymentSection();
   await getAvailableInfo();
-  await dataOfNextBar();
-  await userInfo();
-  await autoIncome();
-  await partnerInfo();
-  await userLevelInfo();
-  await userPartnerUpgradeStatus();
-  await partnerLevelInfo();
-  loaderEnd();
+  await kbcUserInfo();
+  await todayWinner();
+  await kbcNetworkInfo();
+  await sliderSection();
+  await readvalueOnWritefun();
+  await top4Function();
+  await levelValues();
+  await kbcRewardInfo();
 }
 
 hirarchy();
