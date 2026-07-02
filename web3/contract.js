@@ -1,4 +1,4 @@
-const contractAddress = "0xa8669D74381146400Ed800d23a1E899E5d94ae17";
+const contractAddress = "0x022cfc94baf58911cd4546631ac4bfa97a1c2c8e";
 const stableCoinAddress = "0x0EB11261F9F778fEfd688e2dfAdB77862E96605b";
 const contractABI = [
   {
